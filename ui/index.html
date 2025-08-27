@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <div class="mainpanel" v-show="Opened">
+            <div class="header">
+                <div class="close-btn" @click="closePanel()">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <h1>{{LANG.TITLE}}</h1>
+            </div>
+            <div class="leftside">
+                <div class="menu-container">
+                    <div :class="{ 'Isactive': currentPage === 'home' }" @click="currentPage = 'home'">
+                        <i class="bi bi-house"></i>
+                        Home
+                    </div>
+                    <div :class="{ 'Isactive': currentPage === 'jobs' }" @click="currentPage = 'jobs'">
+                        <i class="bi bi-briefcase"></i>
+                        Jobs
+                    </div>
+                    <div :class="{ 'Isactive': currentPage === 'export' }" @click="currentPage = 'export'">
+                        <i class="bi bi-clipboard-minus"></i>
+                        Export
+                    </div>
+                    <div :class="{ 'Isactive': currentPage === 'import' }" @click="currentPage = 'import'">
+                        <i class="bi bi-file-earmark-code"></i>
+                        Import
+                    </div>
+                    <div :class="{ 'Isactive': currentPage === 'settings' }" @click="currentPage = 'settings'" class="end">
+                        <i class="bi bi-gear"></i>
+                        Settings
+                    </div>
+                </div>
+            </div>
+            <div class="content-container">
+                <div v-show="currentPage === 'home'">
+                    <div class="information">
+                        <div>
+                            <h2><i class="bi bi-person-x"></i> - {{LANG.JOBCOUNT}}</h2>
+                            <span>{{Jobs.length}}</span>
+                        </div>
+                        <div>
+                            <h2><i class="bi bi-person-check"></i> - {{LANG.ACTIVEJOB}}</h2>
+                            <span>{{activejobs}}</span>
+                        </div>
+                    </div>
+                    <canvas id="chart"></canvas>
+                </div>
+                <div v-show="currentPage === 'jobs'">
+                    <div>
+                        <button class="create-btn" @click="OpenModal('CreateNewJob')">
+                            <i class="bi bi-folder-plus"></i> - {{LANG.CREATE}}
+                        </button>
+                        <div class="search-container">
+                            <i class="bi bi-search"></i>
+                            <input type="text" v-model="jobsearch" :placeholder="LANG.SEARCHJOB">
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="job-container">
+                        <div class="job-item" v-for="(item, index) in JobSearch" @click="OpenModal('Jobdata'); SelectedJob = item; lastopenedJobname = item.name">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <strong>{{item.label}} - {{item.name}}</strong>
+                                </div>
+                                <div class="job-icons">
+                                    <div class="job-icon"><i class="fa-solid fa-trash" @click.stop="DeleteJob(item.name)"></i></div>
+                                    <div class="job-icon" :class="{'disabled-icon': item.bossmenu != null}"><i class="fa-solid fa-user-tie"></i></div>
+                                    <div class="job-icon" :class="{'disabled-icon': item.armory != null}"><i class="fa-solid fa-box-archive"></i></div>
+                                    <div class="job-icon" :class="{'disabled-icon': item.garage != null}"><i class="fa-solid fa-warehouse"></i></div>
+                                    <div class="job-icon" :class="{'disabled-icon': item.wardrobe != null}"><i class="fa-solid fa-shirt"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-show="currentPage === 'export'">
+                    <div class="search-container">
+                            <i class="bi bi-search"></i>
+                            <input type="text" v-model="jobsearch" :placeholder="LANG.SEARCHJOB">
+                    </div>
+                    <div class="job-container">
+                        <div class="job-item" v-for="(item, index) in JobSearch" @click="ImportJob(item)">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <strong>{{item.label}} - {{item.name}}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-show="currentPage === 'import'">
+                    <textarea class="code" id="code"></textarea>
+                    <button class="create-btn" @click="Run()">
+                        <i class="bi bi-floppy"></i> - {{LANG.RUN}}
+                    </button>
+                </div>
+                <div v-show="currentPage === 'settings'" class="btn-group">
+                        <button @click="chartSettings = 'bar'; CreateChart()" :class="{'btn-primary': chartSettings === 'bar', 'btn-outline-primary': chartSettings !== 'bar'}" class="btn" >
+                            <i class="bi bi-bar-chart"></i>
+                        </button>
+                        <button @click="chartSettings = 'barHorizontal'; CreateChart()" :class="{'btn-primary': chartSettings === 'barHorizontal', 'btn-outline-primary': chartSettings !== 'barHorizontal'}" class="btn">
+                            <i class="bi bi-bar-chart-fill"></i>
+                        </button>
+                        <button @click="chartSettings = 'line'; CreateChart()" :class="{'btn-primary': chartSettings === 'line', 'btn-outline-primary': chartSettings !== 'line'}" class="btn">
+                            <i class="bi bi-graph-up"></i>
+                        </button>
+                        <button @click="chartSettings = 'pie'; CreateChart()" :class="{'btn-primary': chartSettings === 'pie', 'btn-outline-primary': chartSettings !== 'pie'}" class="btn">
+                            <i class="bi bi-pie-chart"></i>
+                        </button>
+                        <button @click="chartSettings = 'doughnut'; CreateChart()" :class="{'btn-primary': chartSettings === 'doughnut', 'btn-outline-primary': chartSettings !== 'doughnut'}" class="btn">
+                            <i class="bi bi-circle"></i>
+                        </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modaal" v-show="Modal">
+            <div class="modaal-item" v-show="Modals.Jobdata">
+                <div class="modaal-title">
+                    <h2>{{SelectedJob.label}}</h2>
+                    <hr class="elvalaszto">
+                    <div class="close-btn" @click="CloseModal()">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <div class="grade-list">
+                        <div class="grade-item disabled-icon" v-if="GradeLister?.length === 0">
+                            {{LANG.NOGRADE}}
+                        </div>
+                        <div class="grade-item" v-for="(item, index) in GradeLister" ::key="item.grade">
+                            {{item.label}} ({{item.name}}) - {{item.salary}}$ #{{item.grade}}
+                            <div class="job-icons">
+                                <i class="bi bi-arrow-up-circle" @click="DownGrade(item)"></i>
+                                <i class="bi bi-arrow-down-circle" @click="UpGrade(item)"></i>
+                                <i class="fa-solid fa-trash" @click="Deletegrade(item.grade)"></i>
+                                <input type="number" id="SalarySetter" :min="item.salary" :value="item.salary" :placeholder="item.salary" @change="UpdateSalary(item, $event.target.value)" class="salary-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grade-plus">
+                        <button class="create-btn" @click="OpenModal('CreateGrade')">
+                            <i class="bi bi-plus-circle"></i> {{LANG.CREATEGRADE}}
+                        </button>
+                        <button class="create-btn" @click="OpenModal('JobExtras')">
+                            <i class="bi bi-braces"></i> {{LANG.EXTRAS}}
+                        </button>
+                        <button class="create-btn" @click="OpenModal('Vehicles')">
+                            <i class="bi bi-list"></i> {{LANG.VEHICLES}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modaal-item" v-show="Modals.CreateGrade">
+                <div class="modaal-title">
+                    <h2>{{SelectedJob.label}} - {{LANG.NEWGRADE}}</h2>
+                    <hr class="elvalaszto">
+                    <div class="close-btn" @click="Modals.Jobdata = true; openedmodal = 'Jobdata'; Modals.CreateGrade = false">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <div class="modal-item-item">
+                        <label>{{LANG.GRADENAME}} </label>
+                        <input id="gradeName" type="text" placeholder="recruit, boss"><br>
+                        <label>{{LANG.GRADELABEL}} </label>
+                        <input id="gradeLabel" type="text" placeholder="Boss, Supervisor"><br>
+                        <label>{{LANG.SALARY}} </label>
+                        <input id="gradeSalary" type="number" placeholder="5000">
+                    </div>
+                    <button class="submit-btn" @click="CreateGrade()">
+                        <i class="bi bi-plus-circle"></i> {{LANG.CREATEGRADE}}
+                    </button>
+                    
+                </div>
+            </div>
+            <div class="modaal-item" v-show="Modals.CreateNewJob">
+                <div class="modaal-title">
+                    <h2>{{LANG.NEWJOB}}</h2>
+                    <hr class="elvalaszto">
+                    <div class="close-btn" @click="CloseModal()">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <div class="modal-item-item">
+                        <label>{{LANG.JOBNAME}} </label>
+                        <input id="jobName" type="text" placeholder="police, ambulance, mechanic"><br>
+                        <label>{{LANG.JOBLABEL}} </label>
+                        <input id="jobLabel" type="text" placeholder="LSPD, EMS, Mechanic"><br>
+                        <label>{{LANG.JOBCOLOR}} </label>
+                        <input id="jobColor" type="color" :value="GenerateRandomColor()">
+                    </div>
+                    <button class="submit-btn" @click="CreateJob()">
+                        <i class="bi bi-plus-circle"></i> {{LANG.CREATEJOB}}
+                    </button>
+                    
+                </div>
+            </div>
+            <div class="modaal-item" v-show="Modals.Vehicles">
+                <div class="modaal-title">
+                    <h2>{{LANG.VEHICLES}}</h2>
+                    <hr class="elvalaszto">
+                    <div class="close-btn" @click="Modals.Jobdata = true; openedmodal = 'Jobdata'; Modals.Vehicles = false">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <div class="vehicle-list">
+                        <div class="grade-item disabled-icon" v-if="SelectedJob.vehicles?.length === undefined || SelectedJob.vehicles?.length === 0">
+                            {{LANG.NOCAR}}
+                        </div>
+                        <div class="grade-item" v-for="(item, index) in SelectedJob.vehicles">
+                            {{item.label}} - {{item.model}}
+                            <div class="job-icons">
+                                <i class="fa-solid fa-trash" @click="DeleteVehicle(item.label, item.model)"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-plus">
+                        <button class="create-btn" @click="OpenModal('CreateVehicle')">
+                            <i class="bi bi-plus-circle"></i> {{LANG.CREATEVEHICLE}}
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="modaal-item" v-show="Modals.CreateVehicle">
+                <div class="modaal-title">
+                    <h2>{{LANG.CREATEVEHICLE}}</h2>
+                    <hr class="elvalaszto">
+                    <div class="close-btn" @click="Modals.Vehicles = true; openedmodal = 'Vehicles'; Modals.CreateVehicle = false">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <div class="modal-item-item">
+                        <label>{{LANG.MODELNAME}} </label>
+                        <input id="Vehiclemodel" type="text" placeholder="adder, kuruma, blista"><br>
+                        <label>{{LANG.VEHICLELABEL}} </label>
+                        <input id="VehicleLabel" type="text" placeholder="Lambo, Ford"><br>
+                    </div>
+                    <button class="submit-btn" @click="CreateVehicle()">
+                        <i class="bi bi-plus-circle"></i> {{LANG.CREATEVEHICLE}}
+                    </button>
+                </div>
+            </div>
+            <div class="modaal-item" v-show="Modals.JobExtras">
+                <div class="modaal-title">
+                    <h2>{{LANG.EXTRAS}}</h2>
+                    <hr class="elvalaszto">
+                    <div class="close-btn" @click="Modals.Jobdata = true; openedmodal = 'Jobdata'; Modals.JobExtras = false">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <div class="grade-list extras">
+                        <div class="grade-item" @click="PlaceThing('bossmenu')"><div><i class="fa-solid fa-user-tie"></i> - {{LANG.BOSSMENU}}</div> <span v-if="SelectedJob.bossmenu != null"><i class="bi bi-geo-alt-fill" @click.stop="TPCOORD(SelectedJob.bossmenu)"></i></span></div>
+                        <div class="grade-item" @click="PlaceThing('armory')"><div><i class="bi bi-archive-fill"></i> - {{LANG.ARMORY}}</div> <span v-if="SelectedJob.armory != null"><i class="bi bi-geo-alt-fill" @click.stop="TPCOORD(SelectedJob.bossmenu)"></i></span></div>
+                        <div class="grade-item" @click="PlaceThing('garage')"><div><i class="fa-solid fa-warehouse"></i> - {{LANG.GARAGE}}</div> <span v-if="SelectedJob.garage != null"><i class="bi bi-geo-alt-fill" @click.stop="TPCOORD(SelectedJob.bossmenu)"></i></span></div>
+                        <div class="grade-item" @click="PlaceThing('wardrobe')"><div><i class="fa-solid fa-shirt"></i> - {{LANG.WARDROBE}}</div> <span v-if="SelectedJob.wardrobe != null"><i class="bi bi-geo-alt-fill" @click.stop="TPCOORD(SelectedJob.bossmenu)"></i></span></div>
+                        <div class="grade-item"><input type="color" id="newcolor" @change="NewColor"></div>
+                        <div class="grade-item" @click="Modals.JobActions = true; openedmodal = 'JobActions'; Modals.JobExtras = false"><div><i class="bi bi-person-lines-fill"></i> - Action Menu</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modaal-item" v-show="Modals.JobActions">
+                <div class="modaal-title">
+                    <h2>{{LANG.EXTRAS}}</h2>
+                    <hr class="elvalaszto">
+                    <div class="close-btn" @click="Modals.JobExtras = true; openedmodal = 'JobExtras'; Modals.JobActions = false">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <div class="grade-list extras">
+                        <div class="grade-item" @click="SetAction('cuff')">
+                            <i class="fa-solid fa-handcuffs"></i> Cuff 
+                            <span><i :class="(SelectedJob.actions && SelectedJob.actions.cuff === 1) ? 'bi bi-check-square-fill' : 'bi bi-square'"></i></span>
+                        </div>
+                        <div class="grade-item" @click="SetAction('drag')">
+                            <i class="fa-solid fa-hand-holding-hand"></i> Drag 
+                            <span><i :class="(SelectedJob.actions && SelectedJob.actions.drag === 1) ? 'bi bi-check-square-fill' : 'bi bi-square'"></i></span>
+                        </div>
+                        <div class="grade-item" @click="SetAction('putInVehicle')">
+                            <i class="fa-solid fa-car"></i> Put In Vehicle 
+                            <span><i :class="(SelectedJob.actions && SelectedJob.actions.putInVehicle === 1) ? 'bi bi-check-square-fill' : 'bi bi-square'"></i></span>
+                        </div>
+                        <div class="grade-item" @click="SetAction('outVehicle')">
+                            <i class="fa-solid fa-car"></i> Drag out of Vehicle 
+                            <span><i :class="(SelectedJob.actions && SelectedJob.actions.outVehicle === 1) ? 'bi bi-check-square-fill' : 'bi bi-square'"></i></span>
+                        </div>
+                        <div class="grade-item" @click="SetAction('search')">
+                            <i class="fa-solid fa-user-secret"></i> Search 
+                            <span><i :class="(SelectedJob.actions && SelectedJob.actions.search === 1) ? 'bi bi-check-square-fill' : 'bi bi-square'"></i></span>
+                        </div>
+                        <div class="grade-item" @click="SetAction('prop')">
+                            <i class="bi bi-box-seam-fill"></i> Prop Place 
+                            <span><i :class="(SelectedJob.actions && SelectedJob.actions.prop === 1) ? 'bi bi-check-square-fill' : 'bi bi-square'"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modaal" v-show="OpenedBossMenu">
+            <div class="bossmenu-container">
+                <div class="bossmenu-header">
+                    <h1>{{LANG.BOSSMENULABEL}}</h1>
+                    <div class="close-btn" @click="closePanel()">
+                        <i class="bi bi-x-lg"></i>
+                    </div>
+                </div>
+                
+                <div class="bossmenu-content">
+                    <div class="bossmenu-sidebar">
+                        <div :class="{'bossmenu-tab-active': activebossmenuselect === 'members'}" @click="activebossmenuselect = 'members'">
+                            <i class="bi bi-people-fill"></i>
+                            <span>Members</span>
+                        </div>
+                        <div :class="{'bossmenu-tab-active': activebossmenuselect === 'addperson'}" @click="activebossmenuselect = 'addperson'">
+                            <i class="bi bi-person-plus-fill"></i>
+                            <span>Recruit</span>
+                        </div>
+                        <div :class="{'bossmenu-tab-active': activebossmenuselect === 'money'}" @click="activebossmenuselect = 'money'">
+                            <i class="bi bi-cash-stack"></i>
+                            <span>Finances</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bossmenu-main">
+                        <div v-show="activebossmenuselect === 'members'" class="bossmenu-members">
+                            <div class="bossmenu-search">
+                                <i class="bi bi-search"></i>
+                                <input type="text" v-model="membersearch" :placeholder="LANG.SEARCHMEMBER">
+                            </div>
+                            
+                            <div class="bossmenu-member-list">
+                                <div class="bossmenu-member" v-for="(item, index) in MemberShow" :key="index">
+                                    <div class="member-info">
+                                        <span class="member-name">{{item.firstname}} {{item.lastname}}</span>
+                                        <span class="member-grade">Rank #{{item.job_grade}}</span>
+                                    </div>
+                                    <div class="member-actions">
+                                        <button @click="UpMember(item.job_grade, item.identifier)" :disabled="item.job_grade >= maxgrade">
+                                            <i class="bi bi-arrow-up-circle"></i> Promote
+                                        </button>
+                                        <button @click="DownMember(item.job_grade, item.identifier)">
+                                            <i class="bi bi-arrow-down-circle"></i> Demote
+                                        </button>
+                                        <button class="fire-btn" @click="KickMember(item.identifier)">
+                                            <i class="bi bi-trash-fill"></i> Fire
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-show="activebossmenuselect === 'addperson'" class="bossmenu-recruit">
+                            <div class="bossmenu-form">
+                                <div class="form-group">
+                                    <label>Player ID</label>
+                                    <input id="playerid" type="text" placeholder="Enter player server ID">
+                                </div>
+                                <div class="form-group">
+                                    <label>Starting Rank</label>
+                                    <input id="playergrade" type="number" placeholder="Enter rank number">
+                                </div>
+                                <button class="bossmenu-submit" @click="PlayerFelvetel()">
+                                    <i class="bi bi-person-check-fill"></i> Hire Member
+                                </button>
+                            </div>
+                        </div>
+                        <div v-show="activebossmenuselect === 'money'" class="bossmenu-finances">
+                            <div class="faction-balance">
+                                <i class="bi bi-bank2"></i>
+                                <div>
+                                    <span>Faction Balance</span>
+                                    <h2>${{factionmoney}}</h2>
+                                </div>
+                            </div>
+                            
+                            <div class="money-actions">
+                                <div class="money-toggle">
+                                    <button :class="{'active': moneytype === 'deposit'}" @click="moneytype = 'deposit'">Deposit</button>
+                                    <button :class="{'active': moneytype === 'withdraw'}" @click="moneytype = 'withdraw'">Withdraw</button>
+                                </div>
+                                
+                                <div class="money-input-group">
+                                    <span>$</span>
+                                    <input type="number" id="money" :placeholder="LANG.AMOUNT" @change="Putmoney">
+                                    <button class="confirm-btn" @click="Putmoney">
+                                        Confirm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

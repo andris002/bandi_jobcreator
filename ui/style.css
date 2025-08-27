@@ -1,0 +1,1104 @@
+:root {
+    --bg-dark: #333333;
+    --bg-darker: #222222;
+    --bg-light: #bbbbbb;
+    --bg-lighter: #dddddd;
+    --accent: #ff5722;
+    --accent-hover: rgb(202, 72, 33);
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --border: rgba(255,255,255,0.12);
+    --highlight: rgba(255,255,255,0.05);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 6px 10px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 15px 25px -5px rgba(0, 0, 0, 0.4);
+
+    --bossmenu-bg: #333333;
+    --bossmenu-header: #222222;
+    --bossmenu-accent: #ff5722;
+    --bossmenu-accent-dark: #b83d18;
+    --bossmenu-text: #f8f9fa;
+    --bossmenu-text-secondary: #adb5bd;
+    --bossmenu-border: #2b2b2b;
+    --bossmenu-card: #252525;
+    --bossmenu-success: #2a9d8f;
+    --bossmenu-danger: #e63946;
+    --bossmenu-warning: #f4a261;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: transparent !important;
+    overflow: hidden;
+    font-size: 14px;
+    user-select: none;
+}
+
+.mainpanel {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 80%;
+    height: 80%;
+    background-color: var(--bossmenu-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--bossmenu-border);
+    overflow: hidden;
+}
+
+.header {
+    position: absolute;
+    left: 15%;
+    height: 7%;
+    width: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bossmenu-accent);
+    background: var(--bossmenu-header);
+    border-bottom: 1px solid var(--bossmenu-border);
+}
+
+.leftside {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 15%;
+    background-color: var(--bossmenu-header);
+    border-radius: 0 0 0 12px;
+    border-right: 1px solid var(--bossmenu-border);
+}
+
+.leftside, .content-container {
+    border-radius: 0 0 0 12px;
+}
+
+.menu-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    margin-top: 10%;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding-top: 15px;
+}
+
+.menu-container div {
+    color: var(--bossmenu-text-secondary);
+    padding: 12px 15px;
+    width: 85%;
+    border-radius: 8px;
+    text-align: left;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    border-left: 3px solid transparent;
+    font-weight: 500;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.menu-container div i {
+    font-size: 20px;
+    width: 20px;
+    text-align: center;
+}
+
+.menu-container div:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--bossmenu-text);
+    transform: translateX(4px);
+}
+
+.end {
+    position: absolute;
+    bottom: 2%;
+}
+
+.menu-container div:focus-visible {
+    outline: 2px solid var(--bossmenu-accent);
+    outline-offset: 2px;
+}
+
+.menu-container div.active {
+    background-color: rgba(230, 57, 70, 0.1);
+    color: var(--bossmenu-accent);
+    border-left: 3px solid var(--bossmenu-accent);
+    font-weight: 500;
+}
+
+.Isactive {
+    background-color: rgba(230, 57, 70, 0.1) !important;
+    color: var(--bossmenu-accent) !important;
+    border-left: 3px solid var(--bossmenu-accent) !important;
+}
+
+.header h1 {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    padding: 12px 0;
+    color: var(--bossmenu-text);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.content-container {
+    position: absolute;
+    top: 7%;
+    left: 15%;
+    width: 85%;
+    height: 93%;
+    border-radius: 0 0 12px 0;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.information {
+    margin-top: 2%;
+    margin-left: 0;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.information div {
+    background-color: var(--bossmenu-card);
+    width: calc(25% - 15px);
+    margin-bottom: 20px;
+    padding: 25px 20px;
+    min-width: 200px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--bossmenu-border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+}
+
+.information div:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.information div h2 {
+    color: var(--bossmenu-text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.information div span {
+    display: block;
+    color: var(--bossmenu-accent);
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 25px;
+    transform: translateY(-50%);
+    color: var(--bossmenu-danger);
+    font-size: 24px;
+    transition: all 0.3s ease;
+    padding: 4px;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.close-btn:hover {
+    transform: translateY(-50%) rotate(90deg);
+    opacity: 1;
+}
+
+.create-btn {
+    color: var(--bossmenu-text);
+    margin: 2% auto 0;
+    text-align: center;
+    font-size: 16px;
+    border: 2px solid var(--bossmenu-border);
+    background-color: var(--bossmenu-card);
+    width: 200px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.create-btn i {
+    font-size: 18px;
+    color: var(--bossmenu-accent);
+}
+
+.create-btn:hover {
+    background-color: var(--bossmenu-header);
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--bossmenu-accent);
+}
+
+.search-container {
+    margin-top: 2%;
+    margin-left: 0;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.search-container input {
+    padding: 12px 15px 12px 38px;
+    background-color: var(--bossmenu-card);
+    border: 1px solid var(--bossmenu-border);
+    color: var(--bossmenu-text);
+    border-radius: 8px;
+    width: 250px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.search-container input:focus {
+    outline: none;
+    border-color: var(--bossmenu-accent);
+    width: 280px;
+}
+
+.search-container i {
+    position: absolute;
+    left: 14px;
+    color: var(--bossmenu-text-secondary);
+    pointer-events: none;
+}
+
+.job-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    gap: 10px;
+    max-height: calc(100% - 120px);
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.job-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.job-container::-webkit-scrollbar-track {
+    background: var(--bossmenu-header);
+    border-radius: 4px;
+}
+
+.job-container::-webkit-scrollbar-thumb {
+    background: var(--bossmenu-accent);
+    border-radius: 4px;
+}
+
+.grade-list::-webkit-scrollbar, .vehicle-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.grade-list::-webkit-scrollbar-track, .vehicle-list::-webkit-scrollbar-track {
+    background: var(--bossmenu-header);
+    border-radius: 4px;
+}
+
+.grade-list::-webkit-scrollbar-thumb, .vehicle-list::-webkit-scrollbar-thumb {
+    background: var(--bossmenu-accent);
+    border-radius: 4px;
+}
+
+.job-item {
+    padding: 18px 20px;
+    background-color: var(--bossmenu-card);
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--bossmenu-border);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.job-item:hover {
+    background-color: var(--bossmenu-header);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--bossmenu-accent);
+}
+
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.job-title {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.job-title strong {
+    color: var(--bossmenu-accent);
+    font-weight: 600;
+}
+
+.job-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.job-icon {
+    color: var(--bossmenu-text-secondary);
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.job-icon:hover {
+    transform: scale(1.2);
+    color: var(--bossmenu-text);
+}
+
+.disabled-icon {
+    color: var(--bossmenu-accent);
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.content-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content-container::-webkit-scrollbar-track {
+    background: var(--bossmenu-header);
+}
+
+.content-container::-webkit-scrollbar-thumb {
+    background: var(--bossmenu-accent);
+    border-radius: 4px;
+}
+
+.rotate-icon {
+    transform: rotate(180deg);
+    transition: transform 0.2s ease;
+}
+
+.modaal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: 60%;
+    background-color: var(--bossmenu-bg);
+    transform: translate(-50%,-50%);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--bossmenu-border);
+    overflow: hidden;
+}
+
+.modaal-item {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 20px;
+}
+
+.modaal-title {
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+    font-weight: 600;
+    color: var(--bossmenu-accent);
+}
+
+.modal-item-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    user-select: none;
+}
+
+.modal-item-item input{
+    background-color: var(--bossmenu-card);
+    border: 2px solid var(--bossmenu-border);
+    width: 40%;
+    text-align: center;
+    padding: 7px;
+    border-radius: 5px;
+    color: var(--bossmenu-text);
+    user-select: none;
+}
+
+.modal-item-item input:focus{
+    outline: none;
+    border-color: var(--bossmenu-accent);
+}
+
+.modal-item-item button{
+    padding: 10px;
+    background-color: var(--bossmenu-accent);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: 100ms all ease-in-out;
+}
+
+.modal-item-item button:hover {
+    transform: translateY(-3px);
+    background-color: var(--bossmenu-accent-dark);
+    box-shadow: var(--shadow-md);
+}
+
+.elvalaszto {
+    width: 80%;
+    margin: 15px auto;
+    border: 1px solid var(--bossmenu-border);
+    border-radius: 4px;
+}
+
+.grade-list, .vehicle-list {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 80%;
+    height: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.salary-input{
+    background-color: var(--bossmenu-card);
+    padding: 5px;
+    border: 1px solid var(--bossmenu-border);
+    color: var(--bossmenu-text);
+    border-radius: 3px;
+}
+
+.salary-input:focus {
+    outline: none;
+    border-color: var(--bossmenu-accent);
+}
+
+.grade-plus, .vehicle-plus {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.grade-item, .vehicle-item {
+    padding: 15px;
+    background-color: var(--bossmenu-card);
+    border-radius: 8px;
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--bossmenu-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    color: var(--bossmenu-text);
+}
+
+.grade-item:hover, .vehicle-item:hover {
+    background-color: var(--bossmenu-header);
+    transform: translateY(-2px);
+}
+
+.vehicle-item{
+    width: 70%;
+}
+
+.plus-item {
+    padding: 12px 20px;
+    background-color: var(--bossmenu-card);
+    border-radius: 8px;
+    min-width: 150px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid var(--bossmenu-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    color: var(--bossmenu-text);
+}
+
+.plus-item i {
+    font-size: 16px;
+}
+
+.plus-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    background-color: var(--bossmenu-header);
+}
+
+.add-grade, .add-vehicle {
+    background-color: var(--bossmenu-success);
+    color: white;
+    font-weight: 500;
+    border: none;
+}
+
+.modaal-item-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    user-select: none;
+}
+
+.modaal-item-item input{
+    background-color: var(--bossmenu-card);
+    border: 2px solid var(--bossmenu-border);
+    width: 40%;
+    text-align: center;
+    padding: 7px;
+    border-radius: 5px;
+    color: var(--bossmenu-text);
+    user-select: none;
+}
+
+.modaal-item-item input:focus{
+    outline: none;
+    border-color: var(--bossmenu-accent);
+}
+
+.form-input {
+    background-color: var(--bossmenu-card);
+    border: 2px solid var(--bossmenu-border);
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 15px;
+    color: var(--bossmenu-text);
+    width: 60%;
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--bossmenu-accent);
+}
+
+.submit-btn {
+    background-color: var(--bossmenu-accent);
+    border: none;
+    font-size: 16px;
+    border-radius: 8px;
+    color: white;
+    padding: 12px 30px;
+    margin-top: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    background-color: var(--bossmenu-accent-dark);
+    box-shadow: var(--shadow-md);
+}
+
+.fa-trash {
+    color: var(--bossmenu-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.fa-trash:hover {
+    color: var(--bossmenu-danger);
+    transform: scale(1.2);
+}
+
+.bi-arrow-up-circle, .bi-arrow-down-circle {
+    color: var(--bossmenu-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.bi-arrow-up-circle:hover, .bi-arrow-down-circle:hover {
+    color: var(--bossmenu-accent);
+    transform: scale(1.2);
+}
+
+.code {
+    position: absolute;
+    resize: none;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 80%;
+    height: 70%;
+    background-color: var(--bossmenu-card);
+    color: var(--bossmenu-text);
+    border: 1px solid var(--bossmenu-border);
+    border-radius: 8px;
+    padding: 20px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+}
+
+.code:focus {
+    outline: none;
+    border-color: var(--bossmenu-accent);
+}
+
+#chart {
+    margin-top: 30px;
+    max-height: 550px;
+    max-width: 1100px;
+    width: 100%;
+}
+
+.form-group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.modaal, .job-item, .grade-item, .vehicle-item, .plus-item, .create-btn, .information div {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.members{
+    color: var(--bossmenu-text-secondary);
+}
+
+.btn-primary.btn{
+    background-color: var(--bossmenu-accent);
+    color: var(--bossmenu-text) !important;
+}
+
+.btn{
+    border-color: var(--bossmenu-accent) !important;
+    color: var(--bossmenu-accent) !important;
+}
+
+.btn:hover{
+    background-color: var(--bossmenu-accent) !important;
+    color: var(--bossmenu-text) !important;
+}
+
+.grade-item input[type="color"]{
+    width: 100%;
+}
+
+.grade-item span i {
+    cursor: pointer;
+}
+
+/* BossMenu */ 
+
+.bossmenu-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.bossmenu-header {
+    background: var(--bossmenu-header);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--bossmenu-border);
+}
+
+.bossmenu-header h1 {
+    color: var(--bossmenu-text);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bossmenu-content {
+    display: flex;
+    height: calc(100% - 60px);
+}
+
+.bossmenu-sidebar {
+    width: 180px;
+    background: var(--bossmenu-header);
+    border-right: 1px solid var(--bossmenu-border);
+    padding: 15px 0;
+}
+
+.bossmenu-sidebar div {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: var(--bossmenu-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.bossmenu-sidebar div i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.bossmenu-sidebar div:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--bossmenu-text);
+}
+
+.bossmenu-tab-active {
+    background: rgba(230, 57, 70, 0.1) !important;
+    color: var(--bossmenu-accent) !important;
+    border-left: 3px solid var(--bossmenu-accent) !important;
+}
+
+.bossmenu-main {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.bossmenu-search {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.bossmenu-search i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--bossmenu-text-secondary);
+}
+
+.bossmenu-search input {
+    width: 100%;
+    padding: 10px 15px 10px 35px;
+    background: var(--bossmenu-card);
+    border: 1px solid var(--bossmenu-border);
+    border-radius: 4px;
+    color: var(--bossmenu-text);
+    outline: none;
+}
+
+.bossmenu-search input:focus {
+    border-color: var(--bossmenu-accent);
+}
+
+.bossmenu-member-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.bossmenu-member {
+    background: var(--bossmenu-card);
+    border-radius: 6px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--bossmenu-border);
+}
+
+.member-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.member-name {
+    color: var(--bossmenu-text);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.member-grade {
+    color: var(--bossmenu-text-secondary);
+    font-size: 0.85rem;
+    margin-top: 3px;
+}
+
+.member-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.member-actions button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--bossmenu-text);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.member-actions button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.member-actions button i {
+    font-size: 0.9rem;
+}
+
+.member-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.fire-btn {
+    background: rgba(230, 57, 70, 0.2) !important;
+    color: var(--bossmenu-danger) !important;
+}
+
+.fire-btn:hover {
+    background: rgba(230, 57, 70, 0.3) !important;
+}
+
+.bossmenu-recruit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.bossmenu-form {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: var(--bossmenu-text);
+    font-size: 0.95rem;
+}
+
+.form-group input {
+    padding: 12px 15px;
+    background: var(--bossmenu-card);
+    border: 1px solid var(--bossmenu-border);
+    border-radius: 4px;
+    color: var(--bossmenu-text);
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: var(--bossmenu-accent);
+}
+
+.bossmenu-submit {
+    padding: 12px;
+    background: var(--bossmenu-accent);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.bossmenu-submit:hover {
+    background: var(--bossmenu-accent-dark);
+}
+
+.bossmenu-finances {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    height: 100%;
+}
+
+.faction-balance {
+    background: var(--bossmenu-card);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid var(--bossmenu-border);
+}
+
+.faction-balance i {
+    font-size: 2rem;
+    color: var(--bossmenu-accent);
+}
+
+.faction-balance div {
+    display: flex;
+    flex-direction: column;
+}
+
+.faction-balance span {
+    color: var(--bossmenu-text-secondary);
+    font-size: 0.9rem;
+}
+
+.faction-balance h2 {
+    color: var(--bossmenu-text);
+    margin: 5px 0 0;
+    font-size: 1.8rem;
+}
+
+.money-actions {
+    background: var(--bossmenu-card);
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid var(--bossmenu-border);
+}
+
+.money-toggle {
+    display: flex;
+    margin-bottom: 20px;
+    background: var(--bossmenu-header);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.money-toggle button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: var(--bossmenu-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.money-toggle button.active {
+    background: var(--bossmenu-accent);
+    color: white;
+}
+
+.money-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.money-input-group span {
+    color: var(--bossmenu-text);
+    font-weight: 500;
+}
+
+.money-input-group input {
+    flex: 1;
+    padding: 12px 15px;
+    background: var(--bossmenu-header);
+    border: 1px solid var(--bossmenu-border);
+    border-radius: 4px;
+    color: var(--bossmenu-text);
+    outline: none;
+}
+
+.money-input-group input:focus {
+    border-color: var(--bossmenu-accent);
+}
+
+.confirm-btn {
+    padding: 12px 20px;
+    background: var(--bossmenu-accent);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.confirm-btn:hover {
+    background: var(--bossmenu-accent-dark);
+}
+
+@media (max-width: 768px) {
+    .bossmenu-content {
+        flex-direction: column;
+    }
+    
+    .bossmenu-sidebar {
+        width: 100%;
+        display: flex;
+        padding: 0;
+    }
+    
+    .bossmenu-sidebar div {
+        flex: 1;
+        justify-content: center;
+        padding: 12px;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+    
+    .bossmenu-tab-active {
+        border-left: none !important;
+        border-bottom: 3px solid var(--bossmenu-accent) !important;
+    }
+}
