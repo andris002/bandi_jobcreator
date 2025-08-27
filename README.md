@@ -1,3 +1,4 @@
 # Bandi Jobcreator
 ## Features:
-- teszt
+- Import Job
+- Export Job
