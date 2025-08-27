@@ -1,1 +1,1 @@
-# My Discord: andris00202
+# Bandi Jobcreator
