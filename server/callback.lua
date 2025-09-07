@@ -376,9 +376,7 @@ lib.callback.register('jobcreator:getvehicles', function(source, job)
 end)
 
 lib.callback.register('jobcreator:setf6action', function(source, data)
-    if not IsAdmin(source) then 
-        return JOBCREATOR.Notify(JOBCREATOR.Language[JOBCREATOR.lang].noperm, "error", 3000, source) 
-    end
+    if not IsAdmin(source) then return JOBCREATOR.Notify(JOBCREATOR.Language[JOBCREATOR.lang].noperm, "error", 3000, source) end
 
     local b = MySQL.scalar.await('SELECT actions FROM jobs WHERE name = ?', {data.job})
     

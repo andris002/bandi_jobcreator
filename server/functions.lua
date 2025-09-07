@@ -87,7 +87,19 @@ CreateThread(function()
 end)
 
 CreateThread(function()
-    local sql = MySQL.query.await('SELECT * FROM jobs WHERE armory IS NOT NULL')
+    local sql
+
+    local su, res = pcall(function()
+        sql = MySQL.query.await('SELECT * FROM jobs WHERE armory IS NOT NULL')
+    end)
+
+    while not su do
+        Wait(1000)
+        su, res = pcall(function()
+            sql = MySQL.query.await('SELECT * FROM jobs WHERE armory IS NOT NULL')
+        end)
+    end
+
     for i, v in ipairs(sql) do
         local coords = json.decode(v.armory)
         placeArmory(v.name, coords)
