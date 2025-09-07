@@ -260,7 +260,7 @@ end)
 
 lib.callback.register('jobcreator:felvetel', function(source, data)
     local player = ESX.GetPlayerFromId(source)
-    local target = ESX.GetPlayerFromIdentifier(data.id)
+    local target = ESX.GetPlayerFromId(data.id)
     if not player then return false end
     if not target then return JOBCREATOR.Notify(JOBCREATOR.Language[JOBCREATOR.lang].noplayer, "error", 3000, source) end
     if player.job.grade_name ~= "boss" then 
