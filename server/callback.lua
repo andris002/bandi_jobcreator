@@ -53,6 +53,9 @@ lib.callback.register('jobcreator:createjob', function(source, data)
     local asd = MySQL.insert.await('INSERT INTO `jobs` (name, label, color) VALUES (?, ?, ?)', {
         data.name, data.label, data.color
     })
+
+    ESX.RefreshJobs()
+
     if asd then return true end
 end)
 
@@ -118,8 +121,8 @@ lib.callback.register("jobcreator:importjob", function(source, data)
         end
     end
 
-    MySQL.insert.await('INSERT INTO `jobs` (name, label, bossmenu, armory, garage, wardrobe, vehicles, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', {
-        data.name, data.label, data.bossmenu, data.armory, data.garage, data.wardrobe, data.vehicles, data.color
+    MySQL.insert.await('INSERT INTO `jobs` (name, label, bossmenu, armory, garage, wardrobe, vehicles, color, money, actions) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        data.name, data.label, data.bossmenu, data.armory, data.garage, data.wardrobe, data.vehicles, data.color, data.money, json.encode(data.actions)
     })
 
     if data.grade then 
@@ -129,6 +132,8 @@ lib.callback.register("jobcreator:importjob", function(source, data)
             })
         end
     end
+
+    ESX.RefreshJobs()
 
     return true
 end)
@@ -300,6 +305,8 @@ lib.callback.register('jobcreator:deletejob', function(source, data)
     MySQL.query.await('DELETE FROM job_grades WHERE job_name = ?', {
         data
     })
+
+    ESX.RefreshJobs()
 end)
 
 lib.callback.register('jobcreator:updatemember', function(source, data)
