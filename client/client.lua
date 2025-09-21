@@ -632,7 +632,7 @@ function PlaceObject(prop, icon)
 
     SetEntityVisible(prop, true, false)
     PlaceObjectOnGroundProperly(prop)
-    lib.showTextUI(Config.Locale.Prop_Rotate)
+    lib.showTextUI(JOBCREATOR.Language[JOBCREATOR.lang].prop_rotate)
     SetEntityDrawOutline(prop, true)
 
         Citizen.CreateThread(function()
@@ -713,7 +713,7 @@ function PlaceObject(prop, icon)
                     coords = propCoords,
                     distance = 1.5,
                     onEnter = function()
-                        lib.showTextUI(Config.Locale.Prop_Delete, {
+                        lib.showTextUI(CJOBCREATOR.Language[JOBCREATOR.lang].prop_delete, {
                             position = "right-center",
                             icon = icon
                         })
