@@ -713,7 +713,7 @@ function PlaceObject(prop, icon)
                     coords = propCoords,
                     distance = 1.5,
                     onEnter = function()
-                        lib.showTextUI(CJOBCREATOR.Language[JOBCREATOR.lang].prop_delete, {
+                        lib.showTextUI(JOBCREATOR.Language[JOBCREATOR.lang].prop_delete, {
                             position = "right-center",
                             icon = icon
                         })
